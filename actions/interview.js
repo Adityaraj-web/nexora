@@ -53,7 +53,26 @@ export async function generateQuiz() {
     return quiz.questions;
   } catch (error) {
     console.error("Error generating quiz:", error);
-    throw new Error("Failed to generate quiz questions");
+    if (error.message?.includes("503") || error.status === 503) {
+      return [
+        {
+          question: "Gemini is currently overloaded. Please try again later.",
+          options: ["", "", "", ""],
+          correctAnswer: "",
+          explanation: "",
+        },
+      ];
+    }
+
+    return [
+      {
+        question:
+          "An error occurred while generating your mock interview. Please try again shortly.",
+        options: ["", "", "", ""],
+        correctAnswer: "",
+        explanation: "",
+      },
+    ];
   }
 }
 
